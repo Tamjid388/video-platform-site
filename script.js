@@ -31,11 +31,47 @@ const loadVidoes=()=>{
     
     
     }
+    // Load Category Videos after clicking button
+    const loadcategoryVideos=(id)=>{
+    
+      // fetch api
+
+      fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+      .then((res)=>res.json() )
+      .then((data)=>
+      
+      {
+        const activeBtn=document.getElementById(`btn-${id}`)
+        displayVideos(data.category);
+
+      }
+      )
+      .catch((errror)=>console.log(errror))
+
+
+
+    }
 
 
     const displayVideos=(videos)=>{
         const VideoContainer=document.getElementById('videos');
+        VideoContainer.innerHTML=''
         console.log(videos);
+        if(videos.length == 0){
+          VideoContainer.classList.remove('grid')
+           VideoContainer.innerHTML=`
+           <div class="h-full w-full flex flex-col gap-5 justify-center items-center">
+           
+           <img src="assets/Icon.png"/>
+
+           <h1 class="font-bold">No Content Here</h1>
+           </div>
+           `
+           return
+        }
+        else{
+          VideoContainer.classList.add('grid')
+        }
         videos.forEach(video => {
             const card=document.createElement('div')
             card.classList='card card-compact'
@@ -84,16 +120,40 @@ const displayCategories=(categories)=>{
     const categoryContainer=document.getElementById('category-div');
 categories.forEach(
     (item)=>{
-        // console.log(item);
+     
 
-        const button=document.createElement('button')
-        button.classList='btn';
-        button.innerText=item.category
+        const buttonContainer=document.createElement('div')
+      buttonContainer.innerHTML=`
+      <button id="btn-${item.category_id}" onclick="loadcategoryVideos(${item.category_id})" class='btn'>
+      ${item.category}
+      </button>
+      `
         
-        categoryContainer.appendChild(button)
+        categoryContainer.appendChild( buttonContainer)
+
+      
     }
 )
 }
+
+
+
+// const displayCategories=(categories)=>{
+//   const categoryContainer=document.getElementById('category-div');
+// categories.forEach(
+//   (item)=>{
+   
+
+//       const button=document.createElement('button')
+//       button.classList='btn';
+//       button.innerText=item.category
+      
+//       categoryContainer.appendChild(button)
+
+    
+//   }
+// )
+// }
 
 
 
